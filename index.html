@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebCV Maker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#4F46E5", secondary: "#10B981" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body
+    class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex flex-col"
+  >
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm">
+      <div
+        class="container mx-auto px-4 py-4 flex justify-between items-center"
+      >
+        <a href="#" class="text-2xl font-['Pacifico'] text-primary"
+          >WebCV Maker</a
+        >
+        <div class="flex items-center space-x-4">
+          <button
+            id="theme-toggle"
+            class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            <i class="ri-sun-line dark:hidden ri-lg"></i>
+            <i class="ri-moon-line hidden dark:block ri-lg"></i>
+          </button>
+          <button
+            id="preview-btn"
+            class="hidden md:flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-button transition-colors"
+          >
+            <i class="ri-eye-line ri-lg"></i>
+            <span>Önizleme</span>
+          </button>
+          <button
+            id="help-btn"
+            class="hidden md:flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-button transition-colors"
+          >
+            <i class="ri-question-line ri-lg"></i>
+            <span>Yardım</span>
+          </button>
+          <button
+            id="download-btn"
+            class="flex items-center space-x-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-button transition-colors"
+            aria-label="CV’yi indir"
+          >
+            <i class="ri-download-line ri-lg"></i>
+            <span class="hidden md:inline">İndir</span>
+          </button>
+          <button
+            id="mobile-menu-btn"
+            class="md:hidden w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            <i class="ri-menu-line ri-lg"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile Menu -->
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden container mx-auto px-4 py-4 border-t border-gray-200 dark:border-gray-700"
+      >
+        <div class="flex flex-col space-y-3">
+          <button
+            class="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-button transition-colors"
+          >
+            <i class="ri-eye-line ri-lg"></i>
+            <span>Önizleme</span>
+          </button>
+          <button
+            class="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-button transition-colors"
+          >
+            <i class="ri-question-line ri-lg"></i>
+            <span>Yardım</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <!-- Main Content -->
+    <main
+      class="flex-grow container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8"
+    >
+      <!-- Form Section -->
+      <div class="w-full md:w-1/2 space-y-6">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <h2 class="text-xl font-semibold mb-4">Kişisel Bilgiler</h2>
+          <div class="space-y-4">
+            <div class="flex flex-col sm:flex-row gap-4">
+              <div class="w-full sm:w-1/2">
+                <label for="firstName" class="block text-sm font-medium mb-1"
+                  >Ad</label
+                >
+                <input
+                  type="text"
+                  id="firstName"
+                  class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  placeholder="Adınız"
+                  required
+                />
+                <p
+                  id="firstName-error"
+                  class="text-red-500 text-xs mt-1 hidden"
+                >
+                  Ad alanı zorunludur.
+                </p>
+              </div>
+              <div class="w-full sm:w-1/2">
+                <label for="lastName" class="block text-sm font-medium mb-1"
+                  >Soyad</label
+                >
+                <input
+                  type="text"
+                  id="lastName"
+                  class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  placeholder="Soyadınız"
+                  required
+                />
+                <p id="lastName-error" class="text-red-500 text-xs mt-1 hidden">
+                  Soyad alanı zorunludur.
+                </p>
+              </div>
+            </div>
+            <div>
+              <label for="title" class="block text-sm font-medium mb-1"
+                >Ünvan</label
+              >
+              <input
+                type="text"
+                id="title"
+                class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                placeholder="Yazılım Geliştirici, Grafik Tasarımcı, vb."
+                required
+              />
+              <p id="title-error" class="text-red-500 text-xs mt-1 hidden">
+                Ünvan alanı zorunludur.
+              </p>
+            </div>
+            <div>
+              <label for="summary" class="block text-sm font-medium mb-1"
+                >Özet</label
+              >
+              <textarea
+                id="summary"
+                rows="3"
+                class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                placeholder="Kendiniz hakkında kısa bir özet yazın..."
+                required
+              ></textarea>
+              <p id="summary-error" class="text-red-500 text-xs mt-1 hidden">
+                Özet alanı zorunludur.
+              </p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Fotoğraf</label>
+              <div id="photo-dropzone" class="dropzone">
+                <i class="ri-image-add-line ri-3x mb-2 text-gray-400"></i>
+                <p class="text-sm text-gray-500 dark:text-gray-400 text-center">
+                  Fotoğrafınızı sürükleyin veya seçin
+                </p>
+                <input
+                  type="file"
+                  id="photo-input"
+                  class="hidden"
+                  accept="image/*"
+                />
+                <button
+                  id="photo-select-btn"
+                  class="mt-3 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-button transition-colors text-sm"
+                >
+                  Dosya Seç
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <h2 class="text-xl font-semibold mb-4">İletişim Bilgileri</h2>
+          <div class="space-y-4">
+            <div>
+              <label for="email" class="block text-sm font-medium mb-1"
+                >E-posta</label
+              >
+              <input
+                type="email"
+                id="email"
+                class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                placeholder="ornek@email.com"
+                required
+              />
+              <p id="email-error" class="text-red-500 text-xs mt-1 hidden">
+                Geçerli bir e-posta adresi girin.
+              </p>
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-medium mb-1"
+                >Telefon</label
+              >
+              <input
+                type="tel"
+                id="phone"
+                class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                placeholder="+90 555 123 4567"
+                required
+              />
+              <p id="phone-error" class="text-red-500 text-xs mt-1 hidden">
+                Telefon numarası zorunludur.
+              </p>
+            </div>
+            <div>
+              <label for="address" class="block text-sm font-medium mb-1"
+                >Adres</label
+              >
+              <p id="address-error" class="text-red-500 text-xs mt-1 hidden">
+                Adres alanı zorunludur.
+              </p>
+              <input
+                type="text"
+                id="address"
+                class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                placeholder="İstanbul, Türkiye"
+                required
+              />
+            </div>
+            <div>
+              <label for="website" class="block text-sm font-medium mb-1"
+                >Web Sitesi</label
+              >
+              <input
+                type="url"
+                id="website"
+                class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                placeholder="www.website.com"
+              />
+            </div>
+            <div>
+              <label for="linkedin" class="block text-sm font-medium mb-1"
+                >LinkedIn</label
+              >
+              <input
+                type="url"
+                id="linkedin"
+                class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                placeholder="linkedin.com/in/kullaniciadi"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">Eğitim</h2>
+            <button
+              id="add-education-btn"
+              class="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
+            >
+              <i class="ri-add-line ri-lg"></i>
+            </button>
+          </div>
+          <div id="education-items" class="space-y-6">
+            <div
+              class="education-item border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+            >
+              <div class="flex justify-between items-start mb-3">
+                <h3 class="font-medium">Eğitim #1</h3>
+                <div class="flex space-x-2">
+                  <button
+                    class="p-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors education-delete-btn"
+                  >
+                    <i class="ri-delete-bin-line"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-sm font-medium mb-1">Okul Adı</label>
+                  <input
+                    type="text"
+                    class="education-school w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    placeholder="İstanbul Üniversitesi"
+                    required
+                  />
+                  <p
+                    class="education-school-error text-red-500 text-xs mt-1 hidden"
+                  >
+                    Okul adı zorunludur.
+                  </p>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1">Bölüm</label>
+                  <input
+                    type="text"
+                    class="education-degree w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    placeholder="Bilgisayar Mühendisliği"
+                    required
+                  />
+                  <p
+                    class="education-degree-error text-red-500 text-xs mt-1 hidden"
+                  >
+                    Bölüm alanı zorunludur.
+                  </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                  <div class="w-full sm:w-1/2">
+                    <label class="block text-sm font-medium mb-1"
+                      >Başlangıç Tarihi</label
+                    >
+                    <input
+                      type="month"
+                      class="education-start w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      required
+                    />
+                    <p
+                      class="education-start-error text-red-500 text-xs mt-1 hidden"
+                    >
+                      Başlangıç tarihi zorunludur.
+                    </p>
+                  </div>
+                  <div class="w-full sm:w-1/2">
+                    <label class="block text-sm font-medium mb-1"
+                      >Bitiş Tarihi</label
+                    >
+                    <input
+                      type="month"
+                      class="education-end w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                    <p
+                      class="education-end-error text-red-500 text-xs mt-1 hidden"
+                    >
+                      Bitiş tarihi, başlangıç tarihinden önce olamaz.
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1">Açıklama</label>
+                  <textarea
+                    class="education-description w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    rows="2"
+                    placeholder="Eğitiminiz hakkında kısa bir açıklama..."
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">İş Deneyimi</h2>
+            <button
+              id="add-experience-btn"
+              class="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
+            >
+              <i class="ri-add-line ri-lg"></i>
+            </button>
+          </div>
+          <div id="experience-items" class="space-y-6">
+            <div
+              class="experience-item border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+            >
+              <div class="flex justify-between items-start mb-3">
+                <h3 class="font-medium">Deneyim #1</h3>
+                <div class="flex space-x-2">
+                  <button
+                    class="p-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors experience-delete-btn"
+                  >
+                    <i class="ri-delete-bin-line"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-sm font-medium mb-1"
+                    >Şirket Adı</label
+                  >
+                  <input
+                    type="text"
+                    class="experience-company w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    placeholder="ABC Teknoloji"
+                    required
+                  />
+                  <p
+                    class="experience-company-error text-red-500 text-xs mt-1 hidden"
+                  >
+                    Şirket adı zorunludur.
+                  </p>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1">Pozisyon</label>
+                  <input
+                    type="text"
+                    class="experience-position w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    placeholder="Kıdemli Yazılım Geliştirici"
+                    required
+                  />
+                  <p
+                    class="experience-position-error text-red-500 text-xs mt-1 hidden"
+                  >
+                    Pozisyon alanı zorunludur.
+                  </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                  <div class="w-full sm:w-1/2">
+                    <label class="block text-sm font-medium mb-1"
+                      >Başlangıç Tarihi</label
+                    >
+                    <input
+                      type="month"
+                      class="experience-start w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      required
+                    />
+                    <p
+                      class="experience-start-error text-red-500 text-xs mt-1 hidden"
+                    >
+                      Başlangıç tarihi zorunludur.
+                    </p>
+                  </div>
+                  <div class="w-full sm:w-1/2">
+                    <label class="block text-sm font-medium mb-1"
+                      >Bitiş Tarihi</label
+                    >
+                    <input
+                      type="month"
+                      class="experience-end w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                    <p
+                      class="experience-end-error text-red-500 text-xs mt-1 hidden"
+                    >
+                      Bitiş tarihi, başlangıç tarihinden önce olamaz.
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <label class="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="experience-current"
+                      aria-checked="false"
+                    />
+                    <span class="checkmark"></span>
+                    Şu anda burada çalışıyorum
+                  </label>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1">Açıklama</label>
+                  <textarea
+                    class="experience-description w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    rows="3"
+                    placeholder="İş sorumluluklarınız ve başarılarınız..."
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <h2 class="text-xl font-semibold mb-4">Opsiyonel Bölümler</h2>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="skills-toggle"
+                  aria-checked="false"
+                />
+                <span class="checkmark"></span>
+                Beceriler
+              </label>
+              <button
+                id="add-skill-btn"
+                class="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
+                disabled
+              >
+                <i class="ri-add-line"></i>
+              </button>
+            </div>
+            <div
+              id="skills-section"
+              class="hidden border-t border-gray-200 dark:border-gray-700 pt-4 mt-4"
+            >
+              <div id="skills-items" class="space-y-4">
+                <!-- Skills will be added here -->
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="languages-toggle"
+                  aria-checked="false"
+                />
+                <span class="checkmark"></span>
+                Dil Becerileri
+              </label>
+              <button
+                id="add-language-btn"
+                class="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
+                disabled
+              >
+                <i class="ri-add-line"></i>
+              </button>
+            </div>
+            <div
+              id="languages-section"
+              class="hidden border-t border-gray-200 dark:border-gray-700 pt-4 mt-4"
+            >
+              <div id="languages-items" class="space-y-4">
+                <!-- Languages will be added here -->
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="projects-toggle"
+                  aria-checked="false"
+                />
+                <span class="checkmark"></span>
+                Projeler
+              </label>
+              <button
+                id="add-project-btn"
+                class="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
+                disabled
+              >
+                <i class="ri-add-line"></i>
+              </button>
+            </div>
+            <div
+              id="projects-section"
+              class="hidden border-t border-gray-200 dark:border-gray-700 pt-4 mt-4"
+            >
+              <div id="projects-items" class="space-y-4">
+                <!-- Projects will be added here -->
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="references-toggle"
+                  aria-checked="false"
+                />
+                <span class="checkmark"></span>
+                Referanslar
+              </label>
+              <button
+                id="add-reference-btn"
+                class="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
+                disabled
+              >
+                <i class="ri-add-line"></i>
+              </button>
+            </div>
+            <div
+              id="references-section"
+              class="hidden border-t border-gray-200 dark:border-gray-700 pt-4 mt-4"
+            >
+              <div id="references-items" class="space-y-4">
+                <!-- References will be added here -->
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobbies-toggle"
+                  aria-checked="false"
+                />
+                <span class="checkmark"></span>
+                Hobiler
+              </label>
+              <button
+                id="add-hobby-btn"
+                class="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
+                disabled
+              >
+                <i class="ri-add-line"></i>
+              </button>
+            </div>
+            <div
+              id="hobbies-section"
+              class="hidden border-t border-gray-200 dark:border-gray-700 pt-4 mt-4"
+            >
+              <div id="hobbies-items" class="space-y-4">
+                <!-- Hobbies will be added here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Preview Section -->
+      <div class="w-full md:w-1/2 space-y-6">
+        <div class="sticky top-4">
+          <div
+            id="cv-preview"
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6 h-[600px] overflow-y-auto"
+          >
+            <div id="preview-template-1" class="cv-preview-template active">
+              <div class="flex flex-col md:flex-row gap-6 mb-6">
+                <div class="preview-image-container">
+                  <img
+                    id="preview-photo"
+                    class="preview-image"
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23e5e7eb'/%3E%3Cpath d='M60,40 C65.5228,40 70,44.4772 70,50 C70,55.5228 65.5228,60 60,60 C54.4772,60 50,55.5228 50,50 C50,44.4772 54.4772,40 60,40 Z M60,65 C73.8071,65 85,76.1929 85,90 L35,90 C35,76.1929 46.1929,65 60,65 Z' fill='%23a1a1aa'/%3E%3C/svg%3E"
+                    alt="Profil Fotoğrafı"
+                  />
+                </div>
+                <div class="flex-grow">
+                  <h1 id="preview-name" class="text-2xl font-bold text-primary">
+                    Ad Soyad
+                  </h1>
+                  <p id="preview-title" class="text-lg text-black mb-2">
+                    Ünvan
+                  </p>
+                  <p id="preview-summary" class="text-sm text-black">
+                    Özet bilgiler burada görünecek.
+                  </p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-sm">
+                <div class="flex items-center gap-2">
+                  <i class="ri-mail-line ri-lg text-primary"></i>
+                  <span id="preview-email" class="text-black"
+                    >ornek@email.com</span
+                  >
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="ri-phone-line ri-lg text-primary"></i>
+                  <span id="preview-phone" class="text-black"
+                    >+90 555 123 4567</span
+                  >
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="ri-map-pin-line ri-lg text-primary"></i>
+                  <span id="preview-address" class="text-black"
+                    >İstanbul, Türkiye</span
+                  >
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="ri-global-line ri-lg text-primary"></i>
+                  <span id="preview-website" class="text-black"
+                    >www.website.com</span
+                  >
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="ri-linkedin-box-line ri-lg text-primary"></i>
+                  <span id="preview-linkedin" class="text-black"
+                    >linkedin.com/in/kullaniciadi</span
+                  >
+                </div>
+              </div>
+              <div id="preview-education" class="preview-section mb-6">
+                <h2
+                  class="preview-section-header text-lg font-semibold border-b border-primary pb-1 mb-3 text-primary"
+                >
+                  Eğitim
+                </h2>
+                <div id="preview-education-items" class="space-y-3 text-black">
+                  <!-- Education items will be added here -->
+                </div>
+              </div>
+              <div id="preview-experience" class="preview-section mb-6">
+                <h2
+                  class="preview-section-header text-lg font-semibold border-b border-primary pb-1 mb-3 text-primary"
+                >
+                  İş Deneyimi
+                </h2>
+                <div id="preview-experience-items" class="space-y-4 text-black">
+                  <!-- Experience items will be added here -->
+                </div>
+              </div>
+              <div id="preview-skills" class="preview-section mb-6 hidden">
+                <h2
+                  class="preview-section-header text-lg font-semibold border-b border-primary pb-1 mb-3 text-primary"
+                >
+                  Beceriler
+                </h2>
+                <div
+                  id="preview-skills-items"
+                  class="grid grid-cols-1 md:grid-cols-2 gap-3 text-black"
+                >
+                  <!-- Skills will be added here -->
+                </div>
+              </div>
+              <div id="preview-languages" class="preview-section mb-6 hidden">
+                <h2
+                  class="preview-section-header text-lg font-semibold border-b border-primary pb-1 mb-3 text-primary"
+                >
+                  Dil Becerileri
+                </h2>
+                <div
+                  id="preview-languages-items"
+                  class="grid grid-cols-1 md:grid-cols-2 gap-3 text-black"
+                >
+                  <!-- Languages will be added here -->
+                </div>
+              </div>
+              <div id="preview-projects" class="preview-section mb-6 hidden">
+                <h2
+                  class="preview-section-header text-lg font-semibold border-b border-primary pb-1 mb-3 text-primary"
+                >
+                  Projeler
+                </h2>
+                <div id="preview-projects-items" class="space-y-3 text-black">
+                  <!-- Projects will be added here -->
+                </div>
+              </div>
+              <div id="preview-references" class="preview-section mb-6 hidden">
+                <h2
+                  class="preview-section-header text-lg font-semibold border-b border-primary pb-1 mb-3 text-primary"
+                >
+                  Referanslar
+                </h2>
+                <div
+                  id="preview-references-items"
+                  class="grid grid-cols-1 md:grid-cols-2 gap-4 text-black"
+                >
+                  <!-- References will be added here -->
+                </div>
+              </div>
+              <div id="preview-hobbies" class="preview-section mb-6 hidden">
+                <h2
+                  class="preview-section-header text-lg font-semibold border-b border-primary pb-1 mb-3 text-primary"
+                >
+                  Hobiler
+                </h2>
+                <div
+                  id="preview-hobbies-items"
+                  class="flex flex-wrap gap-2 text-black"
+                >
+                  <!-- Hobbies will be added here -->
+                </div>
+              </div>
+            </div>
+            <div id="preview-template-2" class="cv-preview-template hidden">
+              <div class="grid grid-cols-3 gap-6">
+                <div class="col-span-1 bg-primary/10 p-4 rounded-lg">
+                  <div class="flex flex-col items-center mb-6">
+                    <div class="preview-image-container mb-4">
+                      <img
+                        id="preview-photo-2"
+                        class="preview-image"
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23e5e7eb'/%3E%3Cpath d='M60,40 C65.5228,40 70,44.4772 70,50 C70,55.5228 65.5228,60 60,60 C54.4772,60 50,55.5228 50,50 C50,44.4772 54.4772,40 60,40 Z M60,65 C73.8071,65 85,76.1929 85,90 L35,90 C35,76.1929 46.1929,65 60,65 Z' fill='%23a1a1aa'/%3E%3C/svg%3E"
+                        alt="Profil Fotoğrafı"
+                      />
+                    </div>
+                    <h1
+                      id="preview-name-2"
+                      class="text-xl font-bold text-center text-black"
+                    >
+                      Ad Soyad
+                    </h1>
+                    <p
+                      id="preview-title-2"
+                      class="text-sm text-black text-center"
+                    >
+                      Ünvan
+                    </p>
+                  </div>
+                  <div class="space-y-3 text-sm">
+                    <div class="flex items-center gap-2">
+                      <i class="ri-mail-line ri-lg text-primary"></i>
+                      <span id="preview-email-2" class="text-black"
+                        >ornek@email.com</span
+                      >
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="ri-phone-line ri-lg text-primary"></i>
+                      <span id="preview-phone-2" class="text-black"
+                        >+90 555 123 4567</span
+                      >
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="ri-map-pin-line ri-lg text-primary"></i>
+                      <span id="preview-address-2" class="text-black"
+                        >İstanbul, Türkiye</span
+                      >
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="ri-global-line ri-lg text-primary"></i>
+                      <span id="preview-website-2" class="text-black"
+                        >www.website.com</span
+                      >
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="ri-linkedin-box-line ri-lg text-primary"></i>
+                      <span id="preview-linkedin-2" class="text-black"
+                        >linkedin.com/in/kullaniciadi</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    id="preview-skills-2"
+                    class="preview-section mt-6 hidden"
+                  >
+                    <h2
+                      class="preview-section-header text-md font-semibold mb-2 text-primary"
+                    >
+                      Beceriler
+                    </h2>
+                    <div
+                      id="preview-skills-items-2"
+                      class="space-y-2 text-black"
+                    >
+                      <!-- Skills will be added here -->
+                    </div>
+                  </div>
+                  <div
+                    id="preview-languages-2"
+                    class="preview-section mt-6 hidden"
+                  >
+                    <h2
+                      class="preview-section-header text-md font-semibold mb-2 text-primary"
+                    >
+                      Dil Becerileri
+                    </h2>
+                    <div
+                      id="preview-languages-items-2"
+                      class="space-y-2 text-black"
+                    >
+                      <!-- Languages will be added here -->
+                    </div>
+                  </div>
+                  <div
+                    id="preview-hobbies-2"
+                    class="preview-section mt-6 hidden"
+                  >
+                    <h2
+                      class="preview-section-header text-md font-semibold mb-2 text-primary"
+                    >
+                      Hobiler
+                    </h2>
+                    <div
+                      id="preview-hobbies-items-2"
+                      class="flex flex-wrap gap-2 text-black"
+                    >
+                      <!-- Hobbies will be added here -->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-span-2 p-4">
+                  <div class="mb-6">
+                    <p id="preview-summary-2" class="text-sm text-black">
+                      Özet bilgiler burada görünecek.
+                    </p>
+                  </div>
+                  <div id="preview-experience-2" class="preview-section mb-6">
+                    <h2
+                      class="preview-section-header text-lg text-primary font-semibold border-b border-primary pb-1 mb-3"
+                    >
+                      İş Deneyimi
+                    </h2>
+                    <div
+                      id="preview-experience-items-2"
+                      class="space-y-4 text-black"
+                    >
+                      <!-- Experience items will be added here -->
+                    </div>
+                  </div>
+                  <div id="preview-education-2" class="preview-section mb-6">
+                    <h2
+                      class="preview-section-header text-lg font-semibold border-b border-primary pb-1 mb-3 text-primary"
+                    >
+                      Eğitim
+                    </h2>
+                    <div
+                      id="preview-education-items-2"
+                      class="space-y-3 text-black"
+                    >
+                      <!-- Education items will be added here -->
+                    </div>
+                  </div>
+                  <div
+                    id="preview-projects-2"
+                    class="preview-section mb-6 hidden"
+                  >
+                    <h2
+                      class="preview-section-header text-lg font-semibold border-b border-primary pb-1 mb-3 text-primary"
+                    >
+                      Projeler
+                    </h2>
+                    <div
+                      id="preview-projects-items-2"
+                      class="space-y-3 text-black"
+                    >
+                      <!-- Projects will be added here -->
+                    </div>
+                  </div>
+                  <div
+                    id="preview-references-2"
+                    class="preview-section mb-6 hidden"
+                  >
+                    <h2
+                      class="preview-section-header text-lg font-semibold border-b border-primary pb-1 mb-3 text-primary"
+                    >
+                      Referanslar
+                    </h2>
+                    <div
+                      id="preview-references-items-2"
+                      class="grid grid-cols-1 md:grid-cols-2 gap-4 text-black"
+                    >
+                      <!-- References will be added here -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+            <h2 class="text-xl font-semibold mb-4">Özelleştirme</h2>
+            <div class="space-y-6">
+              <div>
+                <label class="block text-sm font-medium mb-2">Şablon</label>
+                <div class="grid grid-cols-2 gap-3">
+                  <div
+                    class="template-item active p-2 border rounded-lg"
+                    data-template="1"
+                  >
+                    <div
+                      class="bg-gray-100 dark:bg-gray-700 rounded p-2 h-20 flex flex-col"
+                    >
+                      <div class="flex mb-2">
+                        <div class="w-6 h-6 rounded-full bg-primary/20"></div>
+                        <div class="ml-2 flex-grow">
+                          <div
+                            class="h-2 w-20 bg-gray-300 dark:bg-gray-600 rounded"
+                          ></div>
+                          <div
+                            class="h-2 w-16 bg-gray-300 dark:bg-gray-600 rounded mt-1"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-3 gap-1">
+                        <div
+                          class="h-2 bg-gray-300 dark:bg-gray-600 rounded"
+                        ></div>
+                        <div
+                          class="h-2 bg-gray-300 dark:bg-gray-600 rounded"
+                        ></div>
+                        <div
+                          class="h-2 bg-gray-300 dark:bg-gray-600 rounded"
+                        ></div>
+                      </div>
+                      <div
+                        class="h-2 bg-gray-300 dark:bg-gray-600 rounded mt-2"
+                      ></div>
+                      <div
+                        class="h-2 bg-gray-300 dark:bg-gray-600 rounded mt-1"
+                      ></div>
+                    </div>
+                    <p class="text-center text-sm mt-1">Standart</p>
+                  </div>
+                  <div
+                    class="template-item p-2 border rounded-lg"
+                    data-template="2"
+                  >
+                    <div
+                      class="bg-gray-100 dark:bg-gray-700 rounded p-2 h-20 flex"
+                    >
+                      <div class="w-1/3 bg-primary/20 rounded-l p-1">
+                        <div
+                          class="w-4 h-4 rounded-full bg-gray-300 dark:bg-gray-600 mx-auto mb-1"
+                        ></div>
+                        <div
+                          class="h-1.5 bg-gray-300 dark:bg-gray-600 rounded mb-1"
+                        ></div>
+                        <div
+                          class="h-1.5 bg-gray-300 dark:bg-gray-600 rounded"
+                        ></div>
+                      </div>
+                      <div class="w-2/3 p-1">
+                        <div
+                          class="h-1.5 bg-gray-300 dark:bg-gray-600 rounded mb-1"
+                        ></div>
+                        <div
+                          class="h-1.5 bg-gray-300 dark:bg-gray-600 rounded mb-1"
+                        ></div>
+                        <div
+                          class="h-1.5 bg-gray-300 dark:bg-gray-600 rounded mb-1"
+                        ></div>
+                        <div
+                          class="h-1.5 bg-gray-300 dark:bg-gray-600 rounded"
+                        ></div>
+                      </div>
+                    </div>
+                    <p class="text-center text-sm mt-1">Yan Panel</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Yazı Tipi</label>
+                <div class="grid grid-cols-3 gap-2">
+                  <div
+                    class="font-option active text-center p-2 border rounded-lg"
+                    data-font="Inter"
+                  >
+                    <span class="text-sm">Inter</span>
+                  </div>
+                  <div
+                    class="font-option text-center p-2 border rounded-lg font-poppins"
+                    data-font="Poppins"
+                  >
+                    <span class="text-sm">Poppins</span>
+                  </div>
+                  <div
+                    class="font-option text-center p-2 border rounded-lg font-roboto"
+                    data-font="Roboto"
+                  >
+                    <span class="text-sm">Roboto</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Renk</label>
+                <div class="flex flex-wrap gap-3">
+                  <div
+                    class="color-option active"
+                    style="background-color: #4f46e5"
+                    data-color="#4F46E5"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #10b981"
+                    data-color="#10B981"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #f59e0b"
+                    data-color="#F59E0B"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #ef4444"
+                    data-color="#EF4444"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #8b5cf6"
+                    data-color="#8B5CF6"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #ec4899"
+                    data-color="#EC4899"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #06b6d4"
+                    data-color="#06B6D4"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #374151"
+                    data-color="#374151"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #9b59b6"
+                    data-color="#9b59b6"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #00ff55"
+                    data-color="#00ff55"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #ff006a"
+                    data-color="#d900ff"
+                  ></div>
+                  <div
+                    class="color-option"
+                    style="background-color: #d0ff00"
+                    data-color="#51ff00"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2"
+                  >Beceri Gösterim Stili</label
+                >
+                <div class="grid grid-cols-2 gap-3">
+                  <div
+                    class="skill-style-option active p-2 border rounded-lg"
+                    data-style="bar"
+                  >
+                    <div class="flex flex-col gap-1">
+                      <div class="flex justify-between text-xs">
+                        <span>Beceri 1</span>
+                        <span>85%</span>
+                      </div>
+                      <div class="skill-bar">
+                        <div class="skill-progress" style="width: 85%"></div>
+                      </div>
+                    </div>
+                    <p class="text-center text-sm mt-2">Çubuk</p>
+                  </div>
+                  <div
+                    class="skill-style-option p-2 border rounded-lg"
+                    data-style="stars"
+                  >
+                    <div class="flex flex-col gap-1">
+                      <div class="flex justify-between text-xs">
+                        <span>Beceri 1</span>
+                        <span class="skill-stars">
+                          <i class="ri-star-fill active"></i>
+                          <i class="ri-star-fill active"></i>
+                          <i class="ri-star-fill active"></i>
+                          <i class="ri-star-fill active"></i>
+                          <i class="ri-star-fill"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <p class="text-center text-sm mt-2">Yıldız</p>
+                  </div>
+                  <div
+                    class="skill-style-option p-2 border rounded-lg"
+                    data-style="dots"
+                  >
+                    <div class="flex flex-col gap-1">
+                      <div class="flex justify-between text-xs">
+                        <span>Beceri 1</span>
+                        <span class="skill-dots">
+                          <span class="active"></span>
+                          <span class="active"></span>
+                          <span class="active"></span>
+                          <span class="active"></span>
+                          <span></span>
+                        </span>
+                      </div>
+                    </div>
+                    <p class="text-center text-sm mt-2">Nokta</p>
+                  </div>
+                  <div
+                    class="skill-style-option p-2 border rounded-lg"
+                    data-style="text"
+                  >
+                    <div class="flex flex-col gap-1">
+                      <div class="flex justify-between text-xs">
+                        <span>Beceri 1</span>
+                        <span>İleri Seviye</span>
+                      </div>
+                    </div>
+                    <p class="text-center text-sm mt-2">Metin</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8"
+    >
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <a href="#" class="text-xl font-['Pacifico'] text-primary"
+              >WebCV Maker</a
+            >
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              © 2025 Web CvMaker.
+              <a
+                href="https://github.com/developerharmony"
+                target="_blank"
+                class="text-primary hover:text-primary dark:text-primary dark:hover:text-primary transition-colors"
+                >Harmony</a
+              >
+              tarafından geliştirilmiştir. Tüm hakları saklıdır.
+            </p>
+          </div>
+          <div class="flex space-x-4">
+            <a
+              href="https://github.com/developerharmony"
+                target="_blank"
+              class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors"
+            >
+              <i class="ri-twitter-fill ri-lg"></i>
+            </a>
+            <a
+              href="https://github.com/developerharmony"
+                target="_blank"
+              class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors"
+            >
+              <i class="ri-github-fill ri-lg"></i>
+            </a>
+            <a
+              href="https://github.com/developerharmony"
+                target="_blank"
+              class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors"
+            >
+              <i class="ri-linkedin-fill ri-lg"></i>
+            </a>
+          </div>
+          <div class="mt-4 md:mt-0">
+            <a
+              href="#"
+              class="text-sm text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors"
+              >Gizlilik Politikası</a
+            >
+            <span class="text-gray-400 mx-2">|</span>
+            <a
+              href="#"
+              class="text-sm text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors"
+              >Kullanım Şartları</a
+            >
+            <span class="text-gray-400 mx-2">|</span>
+            <a
+              id="help-text"
+              class="text-sm text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors"
+              >Yardım</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Photo Crop Modal -->
+    <div id="photo-crop-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">Fotoğrafı Düzenle</h3>
+          <button
+            id="close-crop-modal"
+            class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+          >
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+        <div class="crop-container mb-4">
+          <img id="crop-image" src="" alt="Kırpılacak Fotoğraf" />
+        </div>
+        <div class="flex justify-end space-x-3">
+          <button
+            id="cancel-crop"
+            class="px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-button transition-colors"
+          >
+            İptal
+          </button>
+          <button
+            id="apply-crop"
+            class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-button transition-colors"
+          >
+            Uygula
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Download Modal -->
+    <div
+      id="download-modal"
+      class="modal hidden"
+      aria-modal="true"
+      role="dialog"
+      aria-label="İndirme Seçenekleri"
+    >
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">CV'yi İndir</h3>
+          <button
+            id="close-download-modal"
+            class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+          >
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+        <div class="space-y-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">Dosya Formatı</label>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="custom-checkbox">
+                <input type="radio" name="file-format" value="pdf" checked />
+                <span class="checkmark"></span>
+                PDF Dosyası
+              </label>
+              <label class="custom-checkbox">
+                <input
+                  type="radio"
+                  name="file-format"
+                  value="png"
+                  aria-checked="false"
+                />
+                <span class="checkmark"></span>
+                PNG Görseli
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Dosya Adı</label>
+            <input
+              type="text"
+              id="file-name"
+              class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+              placeholder="CV_AdSoyad"
+            />
+          </div>
+          <div id="pdf-options">
+            <label class="block text-sm font-medium mb-1">Sayfa Boyutu</label>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="custom-checkbox">
+                <input type="radio" name="page-size" value="a4" checked />
+                <span class="checkmark"></span>
+                A4
+              </label>
+              <label class="custom-checkbox">
+                <input
+                  type="radio"
+                  name="page-size"
+                  value="letter"
+                  aria-checked="false"
+                />
+                <span class="checkmark"></span>
+                Letter
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-end space-x-3">
+          <button
+            id="cancel-download"
+            class="px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-button transition-colors"
+          >
+            İptal
+          </button>
+          <button
+            id="confirm-download"
+            class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-button transition-colors"
+          >
+            İndir
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="modal hidden">
+      <div class="modal-content max-w-4xl">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">CV Önizleme</h3>
+          <button
+            id="close-preview-modal"
+            class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+          >
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+        <div
+          id="preview-content"
+          class="bg-white p-6 rounded-lg mb-4 max-h-[70vh] overflow-y-auto"
+        >
+          <!-- Preview content will be cloned here -->
+        </div>
+        <div class="flex justify-end space-x-3">
+          <button
+            id="preview-download-btn"
+            class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-button transition-colors"
+            aria-label="CV’yi indir"
+          >
+            <i class="ri-download-line mr-1"></i>
+            İndir
+          </button>
+          <button
+            id="close-preview"
+            class="px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-button transition-colors"
+          >
+            Kapat
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal hidden">
+      <div class="modal-content max-w-2xl">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">Yardım</h3>
+          <button
+            id="close-help-modal"
+            class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+          >
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+        <div class="space-y-4 mb-4 max-h-[70vh] overflow-y-auto">
+          <div>
+            <h4 class="font-medium text-primary mb-2">Başlarken</h4>
+            <p class="text-sm">
+              WebCV Maker ile profesyonel bir CV oluşturmak çok kolay! Soldaki
+              formu doldurarak başlayın, sağdaki önizlemede değişiklikleri
+              anında görebilirsiniz.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium text-primary mb-2">Kişisel Bilgiler</h4>
+            <p class="text-sm">
+              Adınız, soyadınız, ünvanınız ve kısa bir özet yazın. Fotoğrafınızı
+              eklemek için "Dosya Seç" butonunu kullanabilir veya doğrudan
+              sürükle-bırak yapabilirsiniz.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium text-primary mb-2">
+              Bölüm Ekleme ve Düzenleme
+            </h4>
+            <p class="text-sm">
+              Eğitim ve iş deneyimi bölümlerine yeni öğeler eklemek için "+"
+              butonunu kullanın. Öğeleri sürükleyerek sıralamayı
+              değiştirebilirsiniz. Silmek için çöp kutusu simgesine tıklayın.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium text-primary mb-2">Opsiyonel Bölümler</h4>
+            <p class="text-sm">
+              Beceriler, dil becerileri, projeler, referanslar ve hobiler gibi
+              ek bölümleri eklemek için ilgili onay kutusunu işaretleyin.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium text-primary mb-2">Özelleştirme</h4>
+            <p class="text-sm">
+              CV'nizin görünümünü özelleştirmek için şablon, yazı tipi, renk ve
+              beceri gösterim stilini değiştirebilirsiniz.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium text-primary mb-2">Önizleme ve İndirme</h4>
+            <p class="text-sm">
+              CV'nizi önizlemek için üst menüdeki "Önizleme" butonunu kullanın.
+              İndirmek için "İndir" butonuna tıklayın ve dosya formatını seçin.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium text-primary mb-2">Verileriniz</h4>
+            <p class="text-sm">
+              Girdiğiniz tüm bilgiler yerel olarak tarayıcınızda saklanır ve
+              sunucularımıza gönderilmez. Tarayıcı verilerinizi temizlerseniz
+              bilgileriniz kaybolabilir.
+            </p>
+          </div>
+        </div>
+        <div class="flex justify-end">
+          <button
+            id="close-help"
+            class="px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-button transition-colors"
+          >
+            Kapat
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="error-toast"
+      class="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md hidden"
+    ></div>
+    <script defer type="module" src="js/script.js"></script>
+  </body>
+</html>

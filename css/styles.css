@@ -1,0 +1,325 @@
+body {
+  font-family: "Inter", sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+:root:not(.dark) {
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  color: rgb(31 41 55 / var(--tw-text-opacity));
+}
+:root:not(.dark) .dark\:bg-gray-800 {
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+:root:not(.dark) .dark\:bg-gray-700 {
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+:root:not(.dark) .dark\:text-gray-200 {
+  color: rgb(31 41 55 / var(--tw-text-opacity));
+}
+:root:not(.dark) .dark\:text-gray-400 {
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+:root:not(.dark) .dark\:border-gray-700 {
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+}
+.font-poppins {
+  font-family: "Poppins", sans-serif;
+}
+.font-roboto {
+  font-family: "Roboto", sans-serif;
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 5px;
+  background-image: linear-gradient(#4f46e5, #4f46e5);
+  background-repeat: no-repeat;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #4f46e5;
+  cursor: pointer;
+  box-shadow: 0 0 2px 0 #555;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.custom-checkbox {
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  user-select: none;
+}
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 4px;
+}
+.dark .checkmark {
+  background-color: #374151;
+  border-color: #4b5563;
+}
+.custom-checkbox:hover input ~ .checkmark {
+  border-color: #4f46e5;
+}
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+.custom-checkbox .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+input:checked {
+  background-color: #4f46e5;
+}
+input:checked :before {
+  transform: translateX(24px);
+}
+.skill-bar {
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.skill-progress {
+  height: 100%;
+  background-color: #4f46e5;
+}
+.skill-stars i {
+  color: #e5e7eb;
+}
+.skill-stars i.active {
+  color: #4f46e5;
+}
+.skill-dots span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  margin-right: 4px;
+}
+.skill-dots span.active {
+  background-color: #4f46e5;
+}
+.sortable-item {
+  cursor: grab;
+}
+.sortable-item:active {
+  cursor: grabbing;
+}
+.sortable-ghost {
+  opacity: 0.5;
+  background-color: #f3f4f6;
+}
+.dark .sortable-ghost {
+  background-color: #374151;
+}
+.cv-section {
+  margin-bottom: 1rem;
+}
+.preview-section {
+  transition: all 0.3s ease;
+}
+.preview-section-header {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #4f46e5;
+}
+.preview-section-content {
+  margin-bottom: 1rem;
+}
+.preview-image-container {
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.template-item {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+.template-item.active {
+  border-color: #4f46e5;
+}
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.color-option.active {
+  border-color: #000;
+}
+.dark .color-option.active {
+  border-color: #fff;
+}
+.font-option {
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+.font-option.active {
+  background-color: #4f46e5;
+  color: white;
+}
+.skill-style-option {
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+.skill-style-option.active {
+  background-color: #4f46e5;
+  color: white;
+}
+.dropzone {
+  border: 2px dashed #e5e7eb;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.dropzone:hover {
+  border-color: #4f46e5;
+}
+.dark .dropzone {
+  border-color: #4b5563;
+}
+.dark .dropzone:hover {
+  border-color: #4f46e5;
+}
+.crop-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background-color: #000;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+.modal-content {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.dark .modal-content {
+  background-color: #1f2937 !important;
+  color: white;
+}
+
+.email-input,
+.address-input,
+.website-input,
+.linkedin-input,
+.reference-email {
+  word-wrap: break-word;
+  max-width: 20ch; 
+}
+.tel-input {
+  max-width: 20ch;
+}
+
+.skill-name,
+.language-name {
+  word-wrap: break-word; 
+  max-width: 14ch; 
+}
+
+
+#preview-email,
+#preview-address,
+#preview-website,
+#preview-linkedin,
+#preview-email-2,
+#preview-address-2,
+#preview-website-2,
+#preview-linkedin-2,
+#preview-skills-items span,
+#preview-skills-items-2 span,
+#preview-languages-items span,
+#preview-languages-items-2 span,
+#preview-references-items .reference-email,
+#preview-references-items-2 .reference-email {
+  word-wrap: break-word;
+  max-width: 15ch; 
+}
+
+#preview-skills-items .skill-name,
+#preview-skills-items-2 .skill-name,
+#preview-languages-items .language-name,
+#preview-languages-items-2 .language-name {
+  max-width: 12ch; 
+}
+
+#error-toast {
+  z-index: 100;
+  transition: opacity 0.3s ease;
+}
